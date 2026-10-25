@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { columnTasks, initialData, moveTask, reduce } from './board';
+import { describe, expect, it, vi } from 'vitest';
+import { columnTasks, initialData, moveTask, reduce, uid } from './board';
 import type { AppData, TaskDraft } from '../models';
 import { isAppData } from '../storage/repository';
 
@@ -9,6 +9,24 @@ function add(data: AppData, title = 'Задача', columnId = data.columns.find
 }
 function fixture() { return add(add(add(initialData(), 'A'), 'B'), 'C'); }
 const titles = (data: AppData, columnId: string) => columnTasks(data, columnId).map(task => task.title);
+
+it('создаёт уникальные UUID v4 без randomUUID на HTTP-адресе локальной сети', () => {
+  const nativeCrypto = crypto;
+  const getRandomValues = vi.fn((bytes: Uint8Array) => {
+    nativeCrypto.getRandomValues(bytes);
+    return bytes;
+  });
+  vi.stubGlobal('crypto', { getRandomValues });
+  try {
+    const ids = Array.from({ length: 20 }, () => uid());
+    expect(new Set(ids).size).toBe(ids.length);
+    ids.forEach(id => expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/));
+    expect(initialData().columns).toHaveLength(3);
+    expect(getRandomValues).toHaveBeenCalled();
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
 
 describe('Доски и задачи', () => {
   it('создаёт пустую доску Мои задачи с тремя колонками', () => {
