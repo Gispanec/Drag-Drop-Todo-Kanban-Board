@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fa" />
+    <meta name="description" content="Flow — спокойное пространство для ваших задач. Независимые Kanban-доски, удобное перетаскивание и локальное хранение." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Flow — ваши задачи в порядке</title>
+    <script>
+      try {
+        const theme = JSON.parse(localStorage.getItem('flow-kanban:v1') || 'null')?.settings?.theme;
+        document.documentElement.dataset.theme = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      } catch { /* Основное приложение покажет ошибку чтения хранилища. */ }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
