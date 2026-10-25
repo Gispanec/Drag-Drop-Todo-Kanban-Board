@@ -18,6 +18,6 @@ export default defineConfig({
       });
     },
   }],
-  server: { port: 5173, strictPort: true },
+  server: { port: 5174, strictPort: true },
   test: { include: ['src/**/*.test.ts', 'scripts/**/*.test.mjs'], environment: 'node' },
 });

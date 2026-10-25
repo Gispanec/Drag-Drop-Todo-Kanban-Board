@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 
-export const PORT = 5173;
+export const PORT = 5174;
 export const LOCAL_URL = `http://localhost:${PORT}/`;
 const execFileAsync = promisify(execFile);
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));

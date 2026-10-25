@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { lanAddresses, supportedNode, missingDependencies, projectId, listenControl, requestControl, httpResponse, tcpOpen, waitForReady } from './flow-runtime.mjs';
+import { PORT, LOCAL_URL, lanAddresses, supportedNode, missingDependencies, projectId, listenControl, requestControl, httpResponse, tcpOpen, waitForReady } from './flow-runtime.mjs';
 
 const cleanups = [];
 afterEach(async () => { while (cleanups.length) await cleanups.pop()(); });
@@ -30,6 +30,10 @@ describe('Адрес телефона', () => {
 });
 
 describe('Проверки установки', () => {
+  it('использует постоянный адрес Flow на порту 5174', () => {
+    expect(PORT).toBe(5174);
+    expect(LOCAL_URL).toBe('http://localhost:5174/');
+  });
   it.each([['22.12.0', true], ['22.11.0', false], ['24.19.0', true], ['20.19.0', false], ['23.0.0', false]])('Node.js %s: %s', (version, expected) => expect(supportedNode(version)).toBe(expected));
   it('находит отсутствующие зависимости без npm и без установки', async () => {
     const root = await mkdtemp(join(tmpdir(), 'Flow & dependencies '));
